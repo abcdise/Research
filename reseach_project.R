@@ -232,9 +232,10 @@ caculate_beta_hat <- function(X_list, Y_list, F_, Lambda){
 }
 
 #Step 5:caculate Beta_hat by iterations
-least_squares <- function(X_list, Y_list, df, tolerance){
+#Input is the data {X_list, Y_list, df}, the tolerence level, and the number of factors r            
+            
+least_squares <- function(X_list, Y_list, df, tolerance, r){
   # Initialize
-  r <- 4
   K <- dim(X_list[[1]])[2]
   formulate <- reformulate(response = c("y_it"), termlabels =
                              paste0("x_it_",c(0:(K-1))) %>% paste(collapse = " + "))
@@ -264,7 +265,7 @@ methods <- list(OLS_FE = function(X_list, Y_list, df) OLS_FE(df),  # make these 
                 OLS_FE2 = function(X_list, Y_list, df) OLS_FE2(df),
                 least_squares = 
                   function(X_list, Y_list, df)
-                    least_squares(X_list, Y_list, df, tolerance=0.005))
+                    least_squares(X_list, Y_list, df, tolerance=0.005), 4)
 
 sim <- function(dgp, method, beta_true, all_N, all_T, nsims){
   # Initialize
@@ -347,6 +348,8 @@ OLS_FE(dgp1$df)$beta_hat
 OLS_FE2(dgp1$df)$beta_hat
 all.equal(OLS_FE(dgp1$df)$beta_hat, OLS_FE2(dgp1$df)$beta_hat)
 
+                
+              
 T_ <- 1000
 N <- 1000
 tol <-0.005
