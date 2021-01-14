@@ -264,7 +264,7 @@ methods <- list(OLS_FE = function(X_list, Y_list, df) OLS_FE(df),  # make these 
                 OLS_FE2 = function(X_list, Y_list, df) OLS_FE2(df),
                 least_squares = 
                   function(X_list, Y_list, df)
-                    least_squares(X_list, Y_list, df, tolerance=0.005))
+                    least_squares(X_list, Y_list, df, tolerance=0.005, r=4))
 
 sim <- function(dgp, method, beta_true, all_N, all_T, nsims){
   # Initialize
