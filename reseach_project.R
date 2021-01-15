@@ -253,7 +253,7 @@ least_squares <- function(X_list, Y_list, df, tolerance){
   }
   return(list(beta_hat=beta_hat, beta_hat_list=beta_hat_list))
 }
-              
+               
               
               
 #####  Interacctive Fixed Effect Model with Additive Terms and grand mean  ##### 
