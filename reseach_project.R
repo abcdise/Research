@@ -177,7 +177,7 @@ OLS_FE2 <- function(df){
 }
 
 
-#####  Interacctive Fixed Effect Methods  #####
+#####  Interacctive Fixed Effect Model without Additive Terms  #####
 
 ### Least Squares Model ###
 #Step 1: Caculate F given beta, dim of F_hat is (T_, r)
@@ -253,6 +253,86 @@ least_squares <- function(X_list, Y_list, df, tolerance){
   }
   return(list(beta_hat=beta_hat, beta_hat_list=beta_hat_list))
 }
+              
+              
+              
+#####  Interacctive Fixed Effect Model with Additive Terms and grand mean  ##### 
+##The precise definitions are given in page 1253 of Bai (2019)              
+              
+#calculate the overall average of lists, i.e., $\bar X_{dot,dot}$
+ave_list <- function(X_list){
+  N <- length(X_list)
+  k <- length(X_list[[1]][1,])
+  T_ <- length(X_list[[1]])/k
+  
+  summe<-rep(0, k)
+  for (i in 1:N){
+    for (t in 1:T_){
+      summe<-summe+X_list[[i]][t,]
+    }
+  }
+  
+  average<-1/(N*T_)*summe
+  return(average)
+}
+
+#calculate the time average of lists, i.e., $\bar X_{i,dot}$
+ave_id_list <- function(x_list){
+  N <- length(x_list)
+  k <- length(x_list[[1]][1,])
+  T_ <- length(x_list[[1]])/k
+  s <- list()
+  x_i_bar<- rep(0, k)
+  for (i in (1:N)){
+    for(j in (1:k)){
+      x_i_bar[j] <- mean(x_list[[i]][,j]) 
+    }
+    s[[i]] <- x_i_bar
+  }
+  
+  return(s)
+}
+
+#calculate the identity average of lists, i.e., $\bar X_{dot,t}$
+ave_time_list <- function(x_list){
+  N <- length(x_list)
+  k <- length(x_list[[1]][1,])
+  T_ <- length(x_list[[1]])/k
+  s <- list()
+  x_t_bar<- rep(0, k)
+  for (t in 1:T_){
+    x_t_bar <- rep(0, )
+    
+    for(i in N){
+      x_t_bar <- x_t_bar + x_list[[i]][t,]
+    }
+    
+    average <- 1/N*x_t_bar
+    s[[t]]<- average
+  }
+  
+  return(s)
+}
+
+#Calculate the dot function, i.e., $\dot X_{it}$
+
+dot <- function(X_list){
+  x_dot_list <- list()
+  N <- length(X_list)
+  k <- length(X_list[[1]][1,])
+  T_ <- length(X_list[[1]])/k
+  mat <- matrix(0, nrow=T_, ncol=k)
+  for (i in 1:N){
+    for(t in 1:T_){
+      mat[t,] <- X_list[[i]][t,]-ave_id_list(X_list)[[i]]-ave_time_list(X_list)[[t]]
+                        -ave_list(X_list)
+    }
+    
+    x_dot_list[[i]]<-mat
+  }
+ return(x_dot_list) 
+}
+
               
               
 
