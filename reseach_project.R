@@ -180,7 +180,7 @@ OLS_FE2 <- function(df){
 #####  Interacctive Fixed Effect Methods  #####
 
 ### Least Squares Model ###
-#Step 1:define funtion to caculate F_hat, dim of F_hat is (T_, r)
+#Step 1: Caculate F given beta, dim of F_hat is (T_, r)
 caculate_F_hat <- function(X_list, Y_list, beta_hat, r){
   N <- length(X_list)
   T_ <- dim(X_list[[1]])[1]
