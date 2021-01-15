@@ -253,6 +253,56 @@ least_squares <- function(X_list, Y_list, df, tolerance){
   }
   return(list(beta_hat=beta_hat, beta_hat_list=beta_hat_list))
 }
+              
+              
+
+###################################
+#####     Result Analysis     #####
+###################################
+
+#####  Compute mean squared error  #####
+
+
+mse <- function(est_list, real_para){
+  #input: list of estimations and real parameters
+  #output: mean squared error vector mse. mse[1] means the mse of the first parameter  
+  #N is set to be the number of parameters
+  N <- length(est_list) 
+  
+  #Initialize 
+  mse <- rep(0,length(real_para))
+  
+  #For each estimation i, calculate diff, the difference between the estimation and the true value
+  #For each parameter j, calculate the mse and store it in mse[j]
+  for (i in 1:N){
+    
+    diff <- est_list[[i]]-real_para
+    for (j in 1:length(real_para)){
+      mse[j] <- mse[j]+diff[j]^2
+    }
+  }
+  mse <- 1/N*mse
+  return(mse)
+}
+
+              
+#####  Compute mean of estimations  #####
+
+mean_value <- function(est_list){
+  #Input: list of estimations
+  #Output: vector of mean estimation, denoted by m
+  N <- length(est_list) 
+  k <- length(est_list[[1]])
+  m <- rep(0, k)
+  for (j in 1:k){
+    for (i in 1:N){
+      m[j] <- m[j]+est_list[[i]][j]
+    }
+  }
+  return (1/N*m)
+}
+
+              
 
 ##########################
 #####     Result     #####
